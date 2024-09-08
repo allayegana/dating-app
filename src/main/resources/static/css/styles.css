@@ -1,0 +1,96 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.message-container {
+    max-width: 600px;
+    margin: 0 auto 20px auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    height: 500px;
+    overflow-y: scroll;
+    background-color: #f9f9f9;
+}
+
+.message {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 60%;
+    position: relative;
+}
+
+.message.sent {
+    background-color: #dcf8c6;
+    margin-left: auto;
+}
+
+.message.received {
+    background-color: #fff;
+    margin-right: auto;
+}
+
+.message img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 5px;
+    border-radius: 5px;
+}
+
+.timestamp {
+    font-size: 0.8em;
+    color: #888;
+    position: absolute;
+    bottom: -15px;
+    right: 10px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+textarea {
+    resize: none;
+    height: 100px;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 1em;
+}
+
+input[type="file"] {
+    margin-bottom: 10px;
+}
+
+button {
+    padding: 10px;
+    font-size: 1em;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+a {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #2196f3;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}

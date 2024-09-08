@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Halal Match</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta name="csrf-token" th:content="${_csrf.token}"/>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            display: flex;
+            justify-content: center;
+            background-color: #e3f2fd;
+        }
+
+        .container {
+            display: flex;
+            width: 80%;
+            max-width: 1200px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .profile-section {
+            width: 30%;
+            background-color: #e91e63;
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .profile-section img {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+
+        .profile-section h2 {
+            margin-bottom: 10px;
+        }
+
+        .profile-section p {
+            margin: 5px 0;
+        }
+
+        .other-users-section {
+            width: 70%;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: flex-start;
+        }
+
+        .user-card {
+            background-color: white;
+            width: 45%;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            padding: 10px;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .user-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .user-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .icon-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-top: -30px;
+            position: relative;
+            top: -20px;
+            padding: 0 15px;
+        }
+
+        .icon-bar i {
+            font-size: 24px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .like-icon {
+            color: #ccc;
+        }
+
+        .like-icon:hover,
+        .liked {
+            color: #e91e63;
+        }
+
+        .message-icon {
+            color: #007bff;
+        }
+
+        .message-icon:hover {
+            color: #0056b3;
+        }
+
+        .cancel-icon {
+            color: #ff4d4d;
+        }
+
+        .cancel-icon:hover {
+            color: #ff1a1a;
+        }
+
+        .mutual-like-message {
+            display: none;
+            color: green;
+            font-weight: bold;
+        }
+
+        .vibrate {
+            animation: vibrate 0.3s linear infinite;
+        }
+
+        @keyframes vibrate {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            50% { transform: translateX(2px); }
+            75% { transform: translateX(-2px); }
+        }
+
+        .liked-by-section {
+            margin-top: 20px;
+        }
+
+        .liked-by-section h2 {
+            margin-bottom: 10px;
+            color: #e91e63;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="profile-section">
+        <h1>My Halal Match</h1>
+        <img th:src="@{'/profile-picture/' + ${user.id}}" alt="Profile Picture">
+        <h2 th:text="${user.name}">Your Name</h2>
+        <p><strong>Username:</strong> <span th:text="${user.username}">Username</span></p>
+        <p><strong>Location:</strong> <span th:text="${user.location}">Location</span></p>
+        <p><strong>Age:</strong> <span th:text="${user.age}">Age</span></p>
+        <p><strong>Marital Status:</strong> <span th:text="${user.maritalStatus}">Marital Status</span></p>
+        <p><strong>Children:</strong> <span th:text="${user.hasChildren ? 'Has Children' : 'No Children'}"></span></p>
+        <p><strong>Gender:</strong> <span th:text="${user.gender}">Gender</span></p>
+        <p><strong>Skin Tone:</strong> <span th:text="${user.skinTone}">Skin Tone</span></p>
+    </div>
+
+    <div class="other-users-section">
+        <div class="user-card" th:each="otherUser : ${otherUsers}" th:attr="data-user-id=${otherUser.id}">
+            <img th:src="@{'/profile-picture/' + ${otherUser.id}}" alt="Profile Picture">
+            <div class="icon-bar">
+                <i class="fas fa-heart like-icon" th:id="'like-icon-' + ${otherUser.id}" th:onclick="'likeUser(' + ${otherUser.id} + ')'"></i>
+
+                <!-- Add a link around the message icon -->
+                <a th:href="@{'/messages/' + ${otherUser.id}}">
+                    <i class="fas fa-envelope message-icon"></i>
+                </a>
+
+                <i class="fas fa-times cancel-icon" th:id="'cancel-icon-' + ${otherUser.id}" th:onclick="'cancelUser(' + ${otherUser.id} + ')'"></i>
+            </div>
+            <h3 th:text="${otherUser.name}">User Name</h3>
+            <p><i class="fas fa-map-marker-alt"></i> <span th:text="${otherUser.location}">Location</span></p>
+            <p><i class="fas fa-birthday-cake"></i> <span th:text="${otherUser.age}">Age</span></p>
+            <p><i class="fas fa-heart"></i> <span th:text="${otherUser.maritalStatus}">Marital Status</span></p>
+            <p><i class="fas fa-child"></i> <span th:text="${otherUser.hasChildren ? 'Has Children' : 'No Children'}"></span></p>
+            <p><i class="fas fa-venus-mars"></i> <span th:text="${otherUser.gender}">Gender</span></p>
+            <p><i class="fas fa-palette"></i> <span th:text="${otherUser.skinTone}">Skin Tone</span></p>
+            <div class="mutual-like-message">
+                It's a match!
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+function likeUser(likedUserId) {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    fetch('/like', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        },
+        body: JSON.stringify({ likedUserId: likedUserId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+
+        const likeIcon = document.getElementById(`like-icon-${likedUserId}`);
+        if (likeIcon) {
+            likeIcon.classList.add('liked');
+        }
+
+        const userCard = document.querySelector(`.user-card[data-user-id="${likedUserId}"]`);
+        if (data.mutualLike && userCard) {
+            const mutualLikeMessage = userCard.querySelector('.mutual-like-message');
+            if (mutualLikeMessage) {
+                mutualLikeMessage.style.display = 'block';
+                userCard.classList.add('vibrate');
+                setTimeout(() => userCard.classList.remove('vibrate'), 1000);
+            }
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function cancelUser(userId) {
+    const userCard = document.querySelector(`.user-card[data-user-id="${userId}"]`);
+    if (userCard) {
+        userCard.style.display = 'none';
+    } else {
+        console.error(`Element with data-user-id ${userId} not found.`);
+    }
+}
+</script>
+</body>
+</html>
