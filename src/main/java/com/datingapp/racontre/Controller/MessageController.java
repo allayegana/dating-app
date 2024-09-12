@@ -3,6 +3,7 @@ package com.datingapp.racontre.Controller;
 import com.datingapp.racontre.Model.Message;
 import com.datingapp.racontre.Model.User;
 import com.datingapp.racontre.Service.MessageService;
+import com.datingapp.racontre.Service.SessionManagementService;
 import com.datingapp.racontre.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -29,6 +30,9 @@ public class MessageController {
     @Autowired
     private MessageService messageService;
 
+    @Autowired
+    private SessionManagementService sessionManagementService;
+
         @GetMapping("/conversations")
         public String listConversations(@AuthenticationPrincipal UserDetails currentUser, Model model) {
             if (currentUser == null) {
@@ -46,6 +50,11 @@ public class MessageController {
                 // Récupérer et définir le dernier message pour chaque contact
                 String lastMessage = messageService.getLastMessage(contact, sender);
                 contact.setLastMessage(lastMessage);
+            }
+
+            for (User user : contacts) {
+                boolean isOnline = sessionManagementService.isUserOnline(user); // Check if user is online
+                user.setIsOnline(isOnline); // Set the user's online status
             }
 
             model.addAttribute("contacts", contacts);
@@ -84,6 +93,10 @@ public class MessageController {
                 // Récupérer et définir le dernier message pour chaque contact
                 String lastMessage = messageService.getLastMessage(contact, sender);
                 contact.setLastMessage(lastMessage);
+            }
+            for (User user : contacts) {
+                boolean isOnline = sessionManagementService.isUserOnline(user); // Check if user is online
+                user.setIsOnline(isOnline); // Set the user's online status
             }
 
             model.addAttribute("contacts", contacts);

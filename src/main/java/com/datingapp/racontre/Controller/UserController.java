@@ -3,6 +3,7 @@ package com.datingapp.racontre.Controller;
 import com.datingapp.racontre.Dto.UserDto;
 import com.datingapp.racontre.Model.User;
 import com.datingapp.racontre.Service.LikeService;
+import com.datingapp.racontre.Service.MessageService;
 import com.datingapp.racontre.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private MessageService messageService;
 
     @Autowired
     private LikeService likeService;
@@ -79,19 +83,29 @@ public class UserController {
 
     @GetMapping("/profile")
     public String viewProfile(@AuthenticationPrincipal UserDetails currentUser, Model model) {
+        // Get the logged-in user
         User user = userService.findByUsername(currentUser.getUsername());
         model.addAttribute("user", user);
 
-        // Liste des autres utilisateurs, excluant ceux déjà "likés"
+        // List other users excluding those already "liked"
         List<User> otherUsers = userService.findAllExceptLiked(currentUser.getUsername());
         model.addAttribute("otherUsers", otherUsers);
 
-        // Utilisateurs qui ont "aimé" l'utilisateur connecté
+//        List<User> otherUser = userService.findAllUsers(); // Fetch all users with online status
+//        model.addAttribute("otherUser", otherUser);
+
+        // Users who have "liked" the current user
         Set<User> likedByUsers = userService.getUsersWhoLikedMe(user);
         model.addAttribute("likedByUsers", likedByUsers);
 
-        return "profile";
+
+        // Check if the current user has unread messages
+        boolean hasUnreadMessages = messageService.hasUnreadMessagesForUser(user);
+        model.addAttribute("hasUnreadMessages", hasUnreadMessages);
+
+        return "profile"; // Return the profile template
     }
+
 
 
 

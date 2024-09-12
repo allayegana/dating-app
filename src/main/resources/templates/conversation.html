@@ -4,194 +4,225 @@
     <title>My Conversations</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-    body {
-        font-family: 'Arial', sans-serif;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        height: 100vh;
-        background-color: #f4f4f4;
-    }
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
 
-    .sidebar {
-        width: 25%;
-        border-right: 1px solid #ccc;
-        overflow-y: auto;
-        background-color: #f1f1f1;
-        padding: 10px;
-    }
+        .sidebar {
+            width: 80px;
+            border-right: 1px solid #ccc;
+            overflow-y: auto;
+            background-color: #f1f1f1;
+            padding: 10px;
+            transition: width 0.3s ease;
+        }
 
-    .contact {
-        padding: 15px;
-        border-bottom: 1px solid #ccc;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
+        .sidebar:hover {
+            width: 250px;
+        }
 
-    .contact img {
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        margin-right: 10px;
-        object-fit: cover;
-    }
+        .contact {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            position: relative;
+        }
 
-    .contact-info {
-        display: flex;
-        flex-direction: column;
-    }
+        .contact img {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+        }
 
-    .contact:hover {
-        background-color: #e0e0e0;
-    }
+        .contact-info {
+            display: none;
+            text-align: center;
+            margin-top: 5px;
+        }
 
-    .unread-conversation {
-        background-color: #f0f8ff;
-    }
+        .sidebar:hover .contact-info {
+            display: block;
+        }
 
-    .badge {
-        background-color: red;
-        color: white;
-        padding: 5px;
-        border-radius: 50%;
-        margin-left: 10px;
-    }
+        .contact:hover {
+            background-color: #e0e0e0;
+        }
 
-    .chat-area {
-        width: 75%;
-        display: flex;
-        flex-direction: column;
-        background-color: white;
-        padding: 10px;
-    }
+        .unread-conversation {
+            background-color: #f0f8ff;
+        }
 
-    .messages {
-        flex-grow: 1;
-        padding: 20px;
-        overflow-y: auto;
-        background-color: #f9f9f9;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
+        .badge {
+            background-color: red;
+            color: white;
+            padding: 3px 6px;
+            border-radius: 50%;
+            font-size: 0.8em;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
 
-    .message {
-        margin-bottom: 20px;
-        display: flex;
-    }
+        .chat-area {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+            padding: 10px;
+        }
 
-    .message.you {
-        justify-content: flex-end;
-    }
+        .messages {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
-    .message.you .content {
-        background-color: #d1e7dd;
-        align-self: flex-end;
-        text-align: right;
-        border-radius: 10px 0 10px 10px;
-        padding: 10px;
-        max-width: 60%;
-        word-wrap: break-word;
-    }
+        .message {
+            margin-bottom: 20px;
+            display: flex;
+        }
 
-    .message.them {
-        justify-content: flex-start;
-    }
+        .message.you {
+            justify-content: flex-end;
+        }
 
-    .message.them .content {
-        background-color: #e2e3e5;
-        align-self: flex-start;
-        text-align: left;
-        border-radius: 0 10px 10px 10px;
-        padding: 10px;
-        max-width: 60%;
-        word-wrap: break-word;
-    }
+        .message.you .content {
+            background-color: #d1e7dd;
+            align-self: flex-end;
+            text-align: right;
+            border-radius: 10px 0 10px 10px;
+            padding: 10px;
+            max-width: 60%;
+            word-wrap: break-word;
+        }
 
-    .timestamp {
-        font-size: 0.8em;
-        color: #888;
-        margin-top: 5px;
-    }
+        .message.them .content {
+            background-color: #e2e3e5;
+            align-self: flex-start;
+            text-align: left;
+            border-radius: 0 10px 10px 10px;
+            padding: 10px;
+            max-width: 60%;
+            word-wrap: break-word;
+        }
 
-    .form-container {
-        padding: 10px;
-        border-top: 1px solid #ccc;
-        background-color: #fff;
-        display: flex;
-        align-items: center;
-    }
+        .timestamp {
+            font-size: 0.8em;
+            color: #888;
+            margin-top: 5px;
+        }
 
-    .profile-header {
-        display: flex;
-        justify-content: flex-start;
-        padding: 10px;
-    }
+        .form-container {
+            padding: 10px;
+            border-top: 1px solid #ccc;
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+        }
 
-    .profile-header img {
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        margin-right: 10px;
-    }
+        .profile-header {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 10px;
+        }
 
-    textarea {
-        flex-grow: 1;
-        resize: none;
-        padding: 10px;
-        border-radius: 20px;
-        border: 1px solid #ccc;
-        margin-right: 10px;
-        height: 45px;
-    }
+        .profile-header img {
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
 
-    .file-input {
-        display: none;
-    }
+        textarea {
+            flex-grow: 1;
+            resize: none;
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            margin-right: 10px;
+            height: 45px;
+        }
 
-    .file-label {
-        margin-right: 10px;
-        cursor: pointer;
-        font-size: 1.2em;
-    }
+        .file-input {
+            display: none;
+        }
 
-    button {
-        padding: 10px;
-        border: none;
-        border-radius: 50%;
-        background-color: #4CAF50;
-        color: white;
-        cursor: pointer;
-        font-size: 1.2em;
-    }
+        .file-label {
+            margin-right: 10px;
+            cursor: pointer;
+            font-size: 1.2em;
+        }
 
-    button:hover {
-        background-color: #45a049;
-    }
+        button {
+            padding: 10px;
+            border: none;
+            border-radius: 50%;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2em;
+        }
 
-    .message img {
-        max-width: 150px;
-        height: auto;
-        border-radius: 8px;
-        margin-top: 10px;
-    }
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .message img {
+            max-width: 150px;
+            height: auto;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        /* Online/Offline status indicators */
+        .online-indicator {
+            color: green;
+            font-weight: bold;
+            margin-left: 10px;
+            display: block;
+            font-size: 0.9em;
+        }
+
+        .offline-indicator {
+            color: gray;
+            font-weight: bold;
+            margin-left: 10px;
+            display: block;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 <body>
 
 <div class="sidebar">
-    <h2>Conversations</h2>
-    <ul>
+    <h2 style="text-align: center; font-size: 1em;">Chats</h2>
+    <ul style="list-style-type: none; padding: 0;">
         <li th:each="contact : ${contacts}" class="contact" th:classappend="${contactUnreadStatus[contact]} ? 'unread-conversation' : ''">
-            <a th:href="@{'/messages/' + ${contact.id}}" style="text-decoration: none;">
-                <img th:src="@{'/profile-picture/' + ${contact.id}}" alt="Image du Contact"/>
+            <a th:href="@{'/messages/' + ${contact.id}}" style="text-decoration: none; position: relative;">
+                <img th:src="@{'/profile-picture/' + ${contact.id}}" alt="Contact Image"/>
+                <!-- Show online/offline indicator next to the contact image -->
+                <span th:if="${contact.isOnline}" class="online-indicator">Online</span>
+                <span th:if="${!contact.isOnline}" class="offline-indicator">Offline</span>
                 <div class="contact-info">
-                    <span th:text="${contact.name}">Nom du Contact</span>
-                    <span th:text="${contact.lastMessage}">Dernier message ici</span>
+                    <span th:text="${contact.name}">Contact Name</span>
+                    <span th:text="${contact.lastMessage}" style="font-size: 0.8em; color: #666;">Last message here</span>
                 </div>
+                <span th:if="${contactUnreadStatus[contact]}" class="badge">New</span>
             </a>
-            <span th:if="${contactUnreadStatus[contact]}" class="badge">Nouveau</span>
         </li>
     </ul>
 </div>
@@ -199,7 +230,12 @@
 <div class="chat-area">
     <div class="profile-header">
         <img th:src="@{'/profile-picture/' + ${receiver.id}}" alt="Profile Picture">
-        <span th:text="${receiver.name}" style="font-weight: bold;"></span>
+        <div>
+            <span th:text="${receiver.name}" style="font-weight: bold;"></span>
+            <!-- Show online/offline status under the name -->
+            <span th:if="${receiver.isOnline}" class="online-indicator">Online</span>
+            <span th:if="${!receiver.isOnline}" class="offline-indicator">Offline</span>
+        </div>
     </div>
     <div class="messages">
         <div th:each="message : ${messages}" th:class="'message ' + (${message.sender.id == currentUser.id} ? 'you' : 'them')">
@@ -208,7 +244,7 @@
                 <span th:text="${message.content}"></span>
                 <br>
                 <span th:if="${message.imageUrl}">
-                <img th:src="@{'/uploads/' + ${message.imageUrl}}" alt="Image Attachée">
+                    <img th:src="@{'/uploads/' + ${message.imageUrl}}" alt="Image Attachée">
                 </span>
                 <span class="timestamp" th:text="${#temporals.format(message.timestamp, 'yyyy-MM-dd HH:mm')}"></span>
             </div>
@@ -231,7 +267,6 @@
             </div>
         </form>
     </div>
-
 </div>
 
 </body>

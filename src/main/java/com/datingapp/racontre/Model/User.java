@@ -24,6 +24,7 @@ public class User implements Serializable {
     private int age;
     private String location;
     private boolean mutualLike;
+    private Boolean isOnline = false;
 
     private String maritalStatus; // Célibataire, Marié, Divorcé
     private boolean hasChildren;

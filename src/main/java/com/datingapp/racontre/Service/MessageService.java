@@ -81,8 +81,11 @@ public class MessageService {
     public void markMessagesAsRead(User sender, User receiver) {
         List<Message> messages = messageRepository.findBySenderAndReceiverOrReceiverAndSenderOrderByTimestampAsc(sender, receiver, sender, receiver);
         for (Message message : messages) {
-            if (!message.isRead() && message.getReceiver().equals(receiver)) {
-                message.setRead(true);
+            if (!message.getIsRead() && message.getReceiver().equals(receiver)) {
+                message.setIsRead(false);
+                messageRepository.save(message);
+            }else {
+                message.setIsRead(true);
                 messageRepository.save(message);
             }
         }
@@ -91,6 +94,14 @@ public class MessageService {
     public boolean hasUnreadMessages(User sender, User receiver) {
         return messageRepository.existsBySenderAndReceiverAndIsReadFalse(sender, receiver);
     }
+
+    public boolean hasUnreadMessagesForUser(User receiver) {
+        boolean result = messageRepository.existsByReceiverAndIsReadFalse(receiver);
+        System.out.println("Has unread messages for user " + receiver.getUsername() + ": " + result);
+        return result;
+    }
+
+
 
     public LocalDateTime getLastMessageTime(User contact) {
         Message lastMessage = messageRepository.findTopBySenderOrReceiverOrderByTimestampDesc(contact, contact);

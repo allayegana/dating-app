@@ -26,7 +26,7 @@ public class Message implements Serializable {
     private String content;
 
     @Column(name = "is_read")
-    private boolean isRead = false;
+    private Boolean isRead = false;
     private String imageUrl;
     private LocalDateTime timestamp;
 

@@ -19,4 +19,9 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     Message findFirstBySenderAndReceiverOrReceiverAndSenderOrderByTimestampDesc(User contact, User currentUser, User contact1, User currentUser1);
 
     Message findFirstBySenderAndReceiverOrderByTimestampDesc(User sender, User receiver);
+
+
+        // This will check if there are unread messages for a given receiver
+        boolean existsByReceiverAndIsReadFalse(User receiver);
+
 }

@@ -6,233 +6,295 @@
     <meta name="csrf-token" th:content="${_csrf.token}"/>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            display: flex;
-            justify-content: center;
-            background-color: #e3f2fd;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
         }
 
-        .container {
-            display: flex;
-            width: 80%;
-            max-width: 1200px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-
-        .profile-section {
-            width: 30%;
-            background-color: #e91e63;
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #D12D40;
             color: white;
-            padding: 20px;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+        }
+
+        .user-info-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
         }
 
-        .profile-section img {
+        .header img {
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            width: 150px;
-            height: 150px;
             object-fit: cover;
-            margin-bottom: 20px;
+            margin-bottom: 5px;
         }
 
-        .profile-section h2 {
-            margin-bottom: 10px;
-        }
-
-        .profile-section p {
-            margin: 5px 0;
-        }
-
-        .other-users-section {
-            width: 70%;
-            padding: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            align-items: flex-start;
-        }
-
-        .user-card {
-            background-color: white;
-            width: 45%;
-            margin-bottom: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        .header h1 {
+            margin: 0;
+            font-size: 1.2em;
             text-align: center;
-            padding: 10px;
+        }
+
+        .message-icon-container {
             position: relative;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-right: 60px;
         }
 
-        .user-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .user-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 10px 10px 0 0;
-        }
-
-        .icon-bar {
-            display: flex;
-            justify-content: space-between;
-            margin-top: -30px;
-            position: relative;
-            top: -20px;
-            padding: 0 15px;
-        }
-
-        .icon-bar i {
-            font-size: 24px;
+        .message-icon {
+            font-size: 1.5em;
+            color: white;
             cursor: pointer;
             transition: color 0.3s ease;
         }
 
-        .like-icon {
-            color: #ccc;
-        }
-
-        .like-icon:hover,
-        .liked {
-            color: #e91e63;
-        }
-
-        .message-icon {
-            color: #007bff;
-        }
-
         .message-icon:hover {
-            color: #0056b3;
+            color: #FFD700;
         }
 
-        .cancel-icon {
-            color: #ff4d4d;
+        .badge {
+            background-color: red;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 50%;
+            font-size: 1em;
+            position: absolute;
+            top: -10px;
+            right: -10px;
         }
 
-        .cancel-icon:hover {
-            color: #ff1a1a;
+        .container {
+            max-width: 95%;
+            margin: 120px auto 0;
+            padding: 20px;
+        }
+
+        .user-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .user-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            padding-bottom: 20px;
+        }
+
+        .user-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .user-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .user-info {
+            padding: 15px;
+            text-align: left;
+            position: relative;
+        }
+
+        .user-info h3 {
+            margin: 0 0 10px;
+            color: #2196F3;
+            font-size: 1.2em;
+        }
+
+        .user-info p {
+            margin: 10px 0;
+            font-size: 1em;
+        }
+
+        .user-info p i {
+            margin-right: 10px;
+        }
+
+        .online-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background-color: green;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+
+        .offline-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background-color: gray;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+
+        /* Online status indicator */
+        .online-status {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #00FF00; /* Green for online */
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            display: inline-block;
+        }
+
+        .offline-status {
+            background-color: #FF0000; /* Red for offline */
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-top: 1px solid #ddd;
+            padding-top: 15px;
+        }
+
+        .action-buttons button {
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            font-size: 1.5em;
+            transition: color 0.3s ease;
+            padding: 0 15px;
+        }
+
+        .action-buttons .like-btn:hover {
+            color: #E91E63;
+        }
+
+        .action-buttons .message-btn:hover {
+            color: #2196F3;
+        }
+
+        .action-buttons .cancel-btn:hover {
+            color: #F44336;
         }
 
         .mutual-like-message {
             display: none;
             color: green;
             font-weight: bold;
+            margin-top: 10px;
+            text-align: center;
         }
 
-        .vibrate {
-            animation: vibrate 0.3s linear infinite;
-        }
-
-        @keyframes vibrate {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-2px); }
-            50% { transform: translateX(2px); }
-            75% { transform: translateX(-2px); }
-        }
-
-        .liked-by-section {
-            margin-top: 20px;
-        }
-
-        .liked-by-section h2 {
-            margin-bottom: 10px;
-            color: #e91e63;
+        @media (max-width: 600px) {
+            .user-card img {
+                height: 100px;
+            }
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="profile-section">
-        <h1>My Halal Match</h1>
+<div class="header">
+    <div class="user-info-container">
         <img th:src="@{'/profile-picture/' + ${user.id}}" alt="Profile Picture">
-        <h2 th:text="${user.name}">Your Name</h2>
-        <p><strong>Username:</strong> <span th:text="${user.username}">Username</span></p>
-        <p><strong>Location:</strong> <span th:text="${user.location}">Location</span></p>
-        <p><strong>Age:</strong> <span th:text="${user.age}">Age</span></p>
-        <p><strong>Marital Status:</strong> <span th:text="${user.maritalStatus}">Marital Status</span></p>
-        <p><strong>Children:</strong> <span th:text="${user.hasChildren ? 'Has Children' : 'No Children'}"></span></p>
-        <p><strong>Gender:</strong> <span th:text="${user.gender}">Gender</span></p>
-        <p><strong>Skin Tone:</strong> <span th:text="${user.skinTone}">Skin Tone</span></p>
+        <span th:if="${user.isOnline}" class="online-indicator"></span>
+        <h1 th:text="${user.name}">User Name</h1>
     </div>
+    <div class="message-icon-container">
+        <a th:href="@{'/messages/conversations'}" class="message-icon">
+            <i class="fas fa-envelope"></i>
+            <span th:if="${hasUnreadMessages}" class="badge">New</span>
+        </a>
+    </div>
+</div>
 
-    <div class="other-users-section">
+<div class="container">
+    <div class="user-cards">
         <div class="user-card" th:each="otherUser : ${otherUsers}" th:attr="data-user-id=${otherUser.id}">
             <img th:src="@{'/profile-picture/' + ${otherUser.id}}" alt="Profile Picture">
-            <div class="icon-bar">
-                <i class="fas fa-heart like-icon" th:id="'like-icon-' + ${otherUser.id}" th:onclick="'likeUser(' + ${otherUser.id} + ')'"></i>
+            <div class="user-info">
+                <h3 th:text="${otherUser.name}">User Name</h3>
+                <p><i class="fas fa-map-marker-alt"></i> <span th:text="${otherUser.location}">Location</span></p>
+                <p><i class="fas fa-birthday-cake"></i> <span th:text="${otherUser.age}">Age</span></p>
+                <p><i class="fas fa-heart"></i> <span th:text="${otherUser.maritalStatus}">Marital Status</span></p>
+                <p><i class="fas fa-child"></i> <span th:text="${otherUser.hasChildren ? 'Has Children' : 'No Children'}"></span></p>
+                <p><i class="fas fa-venus-mars"></i> <span th:text="${otherUser.gender}">Gender</span></p>
+                <p><i class="fas fa-palette"></i> <span th:text="${otherUser.skinTone}">Skin Tone</span></p>
 
-                <!-- Add a link around the message icon -->
-                <a th:href="@{'/messages/' + ${otherUser.id}}">
-                    <i class="fas fa-envelope message-icon"></i>
-                </a>
-
-                <i class="fas fa-times cancel-icon" th:id="'cancel-icon-' + ${otherUser.id}" th:onclick="'cancelUser(' + ${otherUser.id} + ')'"></i>
+                <p th:if="${otherUser.isOnline}">
+                    <span class="online-indicator"></span> Online
+                </p>
+                <p th:if="${!otherUser.isOnline}">
+                    <span class="offline-indicator"></span> Offline
+                </p>
+                <div class="mutual-like-message">
+                    It's a match!
+                </div>
             </div>
-            <h3 th:text="${otherUser.name}">User Name</h3>
-            <p><i class="fas fa-map-marker-alt"></i> <span th:text="${otherUser.location}">Location</span></p>
-            <p><i class="fas fa-birthday-cake"></i> <span th:text="${otherUser.age}">Age</span></p>
-            <p><i class="fas fa-heart"></i> <span th:text="${otherUser.maritalStatus}">Marital Status</span></p>
-            <p><i class="fas fa-child"></i> <span th:text="${otherUser.hasChildren ? 'Has Children' : 'No Children'}"></span></p>
-            <p><i class="fas fa-venus-mars"></i> <span th:text="${otherUser.gender}">Gender</span></p>
-            <p><i class="fas fa-palette"></i> <span th:text="${otherUser.skinTone}">Skin Tone</span></p>
-            <div class="mutual-like-message">
-                It's a match!
+            <div class="action-buttons">
+                <button class="like-btn" th:onclick="'likeUser(' + ${otherUser.id} + ')'"><i class="fas fa-heart"></i></button>
+                <a th:href="@{'/messages/' + ${otherUser.id}}">
+                    <button class="message-btn"><i class="fas fa-envelope"></i></button>
+                </a>
+                <button class="cancel-btn" th:onclick="'cancelUser(' + ${otherUser.id} + ')'"><i class="fas fa-times"></i></button>
             </div>
         </div>
     </div>
 </div>
 
 <script th:inline="javascript">
-function likeUser(likedUserId) {
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    fetch('/like', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': csrfToken
-        },
-        body: JSON.stringify({ likedUserId: likedUserId })
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
+    function likeUser(likedUserId) {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        fetch('/like', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify({ likedUserId: likedUserId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
 
-        const likeIcon = document.getElementById(`like-icon-${likedUserId}`);
-        if (likeIcon) {
-            likeIcon.classList.add('liked');
-        }
+            const likeBtn = document.querySelector(`.user-card[data-user-id="${likedUserId}"] .like-btn`);
+            if (likeBtn) {
+                likeBtn.style.color = '#E91E63';
+            }
 
-        const userCard = document.querySelector(`.user-card[data-user-id="${likedUserId}"]`);
-        if (data.mutualLike && userCard) {
+            const userCard = document.querySelector(`.user-card[data-user-id="${likedUserId}"]`);
             const mutualLikeMessage = userCard.querySelector('.mutual-like-message');
-            if (mutualLikeMessage) {
+
+            // Show match message based on JavaScript condition (no backend check)
+            if (data.mutualLike && userCard) {
                 mutualLikeMessage.style.display = 'block';
                 userCard.classList.add('vibrate');
                 setTimeout(() => userCard.classList.remove('vibrate'), 1000);
             }
-        }
-    })
-    .catch(error => console.error('Error:', error));
-}
-
-function cancelUser(userId) {
-    const userCard = document.querySelector(`.user-card[data-user-id="${userId}"]`);
-    if (userCard) {
-        userCard.style.display = 'none';
-    } else {
-        console.error(`Element with data-user-id ${userId} not found.`);
+        })
+        .catch(error => console.error('Error:', error));
     }
-}
+
+    function cancelUser(userId) {
+        const userCard = document.querySelector(`.user-card[data-user-id="${userId}"]`);
+        if (userCard) {
+            userCard.style.display = 'none';
+        } else {
+            console.error(`Element with data-user-id ${userId} not found.`);
+        }
+    }
 </script>
 </body>
 </html>

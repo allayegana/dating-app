@@ -4,195 +4,239 @@
   <title>My Conversations</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            height: 100vh;
-            background-color: #f4f4f4;
-        }
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
 
-        .sidebar {
-            width: 25%;
-            border-right: 1px solid #ccc;
-            overflow-y: auto;
-            background-color: #f1f1f1;
-            padding: 10px;
-        }
+    .sidebar {
+      width: 80px;
+      border-right: 1px solid #ccc;
+      overflow-y: auto;
+      background-color: #f1f1f1;
+      padding: 10px;
+      transition: width 0.3s ease;
+    }
 
-        .contact {
-            padding: 15px;
-            border-bottom: 1px solid #ccc;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
+    .sidebar:hover {
+      width: 200px;
+    }
 
-        .contact img {
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            margin-right: 10px;
-            object-fit: cover;
-        }
+    .sidebar h2 {
+      text-align: center;
+      font-size: 1.2em;
+      margin-bottom: 15px;
+    }
 
-        .contact-info {
-            display: flex;
-            flex-direction: column;
-        }
+    .contact {
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      position: relative;
+    }
 
-        .contact:hover {
-            background-color: #e0e0e0;
-        }
+    .contact img {
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+      margin-bottom: 5px;
+    }
 
-        .unread-conversation {
-            background-color: #f0f8ff;
-        }
+    .contact-info {
+      display: none;
+      text-align: center;
+    }
 
-        .badge {
-            background-color: red;
-            color: white;
-            padding: 5px;
-            border-radius: 50%;
-            margin-left: 10px;
-        }
+    .sidebar:hover .contact-info {
+      display: block;
+    }
 
-        .chat-area {
-            width: 75%;
-            display: flex;
-            flex-direction: column;
-            background-color: white;
-            padding: 10px;
-        }
+    .contact:hover {
+      background-color: #e0e0e0;
+    }
 
-        .messages {
-            flex-grow: 1;
-            padding: 20px;
-            overflow-y: auto;
-            background-color: #f9f9f9;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+    .unread-conversation {
+      background-color: #f0f8ff;
+    }
 
-        .message {
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-        }
+    .badge {
+      background-color: red;
+      color: white;
+      padding: 3px 6px;
+      border-radius: 50%;
+      font-size: 0.8em;
+      position: absolute;
+      top: 5px;
+      right: 5px;
+    }
 
-        .content {
-            max-width: 70%;
-            padding: 10px;
-            border-radius: 15px;
-            position: relative;
-            font-size: 14px;
-        }
+    /* Online/Offline status indicators */
+    .online-indicator {
+      width: 12px;
+      height: 12px;
+      background-color: green;
+      border-radius: 50%;
+      position: absolute;
+      bottom: 5px;
+      right: 10px;
+      border: 2px solid white;
+    }
 
-        .you .content {
-            background-color: #d1e7dd;
-            align-self: flex-end;
-        }
+    .offline-indicator {
+      width: 12px;
+      height: 12px;
+      background-color: gray;
+      border-radius: 50%;
+      position: absolute;
+      bottom: 5px;
+      right: 10px;
+      border: 2px solid white;
+    }
 
-        .them .content {
-            background-color: #e2e3e5;
-            align-self: flex-start;
-        }
+    .chat-area {
+      width: calc(100% - 80px);
+      display: flex;
+      flex-direction: column;
+      background-color: white;
+    }
 
-        .timestamp {
-            font-size: 0.8em;
-            color: #888;
-            margin-top: 5px;
-        }
+    .messages {
+      flex-grow: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background-color: #f9f9f9;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
 
-        .form-container {
-            padding: 10px;
-            border-top: 1px solid #ccc;
-            background-color: #fff;
-            display: flex;
-            align-items: center;
-        }
+    .message {
+      margin-bottom: 15px;
+      display: flex;
+      align-items: flex-start;
+    }
 
-        textarea {
-            flex-grow: 1;
-            resize: none;
-            padding: 10px;
-            border-radius: 20px;
-            border: 1px solid #ccc;
-            margin-right: 10px;
-        }
+    .content {
+      max-width: 70%;
+      padding: 10px;
+      border-radius: 15px;
+      position: relative;
+      font-size: 14px;
+    }
 
-        .file-input {
-            display: none;
-        }
+    .you .content {
+      background-color: #d1e7dd;
+      margin-left: auto;
+    }
 
-        .file-label {
-            margin-right: 10px;
-            cursor: pointer;
-            font-size: 1.2em;
-        }
+    .them .content {
+      background-color: #e2e3e5;
+    }
 
-        button {
-            padding: 10px;
-            border: none;
-            border-radius: 50%;
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
-            font-size: 1.2em;
-        }
+    .timestamp {
+      font-size: 0.8em;
+      color: #888;
+      margin-top: 5px;
+    }
 
-        button:hover {
-            background-color: #45a049;
-        }
+    .form-container {
+      padding: 10px;
+      border-top: 1px solid #ccc;
+      background-color: #fff;
+      display: flex;
+      align-items: center;
+    }
 
-        .message img {
-            max-width: 150px;
-            height: auto;
-            border-radius: 8px;
-            margin-top: 10px;
-        }
+    textarea {
+      flex-grow: 1;
+      resize: none;
+      padding: 10px;
+      border-radius: 20px;
+      border: 1px solid #ccc;
+      margin-right: 10px;
+    }
 
-        .message {
-            margin-bottom: 20px;
-        }
+    .file-input {
+      display: none;
+    }
 
-        .message.sent {
-            background-color: #dcf8c6;
-            padding: 10px;
-            border-radius: 10px;
-            max-width: 60%;
-            word-wrap: break-word;
-            align-self: flex-end;
-        }
+    .file-label {
+      margin-right: 10px;
+      cursor: pointer;
+      font-size: 1.2em;
+    }
 
-        .message.received {
-            background-color: #f0f0f0;
-            padding: 10px;
-            border-radius: 10px;
-            max-width: 60%;
-            word-wrap: break-word;
-            align-self: flex-start;
-        }
-    </style>
+    button {
+      padding: 10px;
+      border: none;
+      border-radius: 50%;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+      font-size: 1.2em;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .message img {
+      max-width: 150px;
+      height: auto;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
+
 <div class="sidebar">
-  <h2>Conversations</h2>
+  <h2>Chats</h2>
   <ul>
     <li th:each="contact : ${contacts}" class="contact" th:classappend="${contactUnreadStatus[contact]} ? 'unread-conversation' : ''">
       <a th:href="@{'/messages/' + ${contact.id}}" style="text-decoration: none;">
-        <img th:src="@{'/profile-picture/' + ${contact.id}}" alt="Image du Contact"/>
+        <img th:src="@{'/profile-picture/' + ${contact.id}}" alt="Contact Image"/>
+        <!-- Online/Offline Status -->
+        <span th:if="${contact.isOnline}" class="online-indicator"></span>
+        <span th:if="${!contact.isOnline}" class="offline-indicator"></span>
         <div class="contact-info">
-          <span th:text="${contact.name}">Nom du Contact</span>
-          <!-- Afficher le dernier message -->
-          <span th:text="${contact.lastMessage}">Dernier message ici</span>
+          <span th:text="${contact.name}">Contact Name</span>
+          <span th:text="${contact.lastMessage}">Last message here</span>
         </div>
       </a>
-      <span th:if="${contactUnreadStatus[contact]}" class="badge">Nouveau</span>
+      <span th:if="${contactUnreadStatus[contact]}" class="badge">New</span>
     </li>
   </ul>
+</div>
+
+<div class="chat-area">
+  <div class="messages">
+    <div th:each="message : ${messages}" th:class="${message.sender == 'you'} ? 'message you' : 'message them'">
+      <div class="content">
+        <p th:text="${message.content}">Message content here</p>
+        <img th:if="${message.image}" th:src="${message.image}" alt="Attached Image"/>
+        <div class="timestamp" th:text="${message.timestamp}">Timestamp</div>
+      </div>
+    </div>
+  </div>
+  <div class="form-container">
+    <input type="file" id="file-input" class="file-input" accept="image/*">
+    <label for="file-input" class="file-label">
+      <i class="fas fa-paperclip"></i>
+    </label>
+    <textarea placeholder="Type a message..."></textarea>
+    <button type="submit">
+      <i class="fas fa-paper-plane"></i>
+    </button>
+  </div>
 </div>
 
 </body>

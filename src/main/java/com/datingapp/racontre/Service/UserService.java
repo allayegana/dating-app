@@ -21,12 +21,23 @@ public class UserService {
     @Autowired
     private LikeRepository likeRepository;
 
+    @Autowired
+    private SessionManagementService sessionManagementService;
+
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     public Set<User> getUsersWhoLikedMe(User user) {
         return user.getLikedByUsers();
+    }
+
+    public void setUserOnlineStatus(String username, boolean isOnline) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            user.setIsOnline(isOnline);
+            userRepository.save(user);
+        }
     }
 
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
@@ -66,6 +77,11 @@ public class UserService {
             user.setMutualLike(isMutualLike);
         }
 
+        for (User user : otherUsers) {
+            boolean isOnline = sessionManagementService.isUserOnline(user); // Check if user is online
+            user.setIsOnline(isOnline); // Set the user's online status
+        }
+
         return otherUsers;
     }
 
@@ -73,4 +89,16 @@ public class UserService {
     public Optional<User> findById(Long receiverId) {
         return  userRepository.findById(receiverId);
     }
+
+//    public List<User> findAllUsers() {
+//        List<User> allUsers = userRepository.findAll(); // Fetch all users from the database
+//
+//        // Update the online status for each user based on your session/activity logic
+//        for (User user : allUsers) {
+//            boolean isOnline = sessionManagementService.isUserOnline(user); // Check if user is online
+//            user.setIsOnline(isOnline); // Set the user's online status
+//        }
+//
+//        return allUsers;
+//    }
 }
