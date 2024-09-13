@@ -110,42 +110,6 @@ public class MessageController {
 
 
 
-
-
-
-//    @GetMapping("/{receiverId}")
-//    public String viewConversation(@AuthenticationPrincipal UserDetails currentUser,
-//                                   @PathVariable Long receiverId, Model model) {
-//        if (currentUser == null) {
-//            return "redirect:/login";
-//        }
-//
-//        User sender = userService.findByUsername(currentUser.getUsername());
-//
-//        // Fetch the receiver
-//        Optional<User> receiverOpt = userService.findById(receiverId);
-//        if (receiverOpt.isEmpty()) {
-//            return "redirect:/messages";  // Redirect if the receiver is not found
-//        }
-//
-//        User receiver = receiverOpt.get();
-//
-//        // Fetch the messages between the sender and receiver
-//        List<Message> messages = messageService.findConversation(sender, receiver);
-//
-//        // Mark the messages as read
-//        messageService.markMessagesAsRead(sender, receiver);
-//
-//        // Add the required objects to the model
-//        model.addAttribute("messages", messages);
-//        model.addAttribute("receiver", receiver);  // Ensure this is passed to the template
-//        model.addAttribute("currentUser", sender);
-//
-//        return "conversation";  // Make sure this points to your actual template
-//    }
-
-
-
     @PostMapping("/{receiverId}")
     public String sendMessage(@AuthenticationPrincipal UserDetails currentUser,
                               @PathVariable Long receiverId,

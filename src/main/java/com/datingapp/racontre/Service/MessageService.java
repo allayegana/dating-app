@@ -47,7 +47,6 @@ public class MessageService {
     public List<User> findContacts(User user) {
         List<Message> messages = messageRepository.findBySenderOrReceiver(user, user);
         for (Message m : messages) {
-            System.out.println("Message: " + m.getContent() + " Sender: " + m.getSender().getUsername() + " Receiver: " + m.getReceiver().getUsername());
         }
 
         return messages.stream()
@@ -96,9 +95,7 @@ public class MessageService {
     }
 
     public boolean hasUnreadMessagesForUser(User receiver) {
-        boolean result = messageRepository.existsByReceiverAndIsReadFalse(receiver);
-        System.out.println("Has unread messages for user " + receiver.getUsername() + ": " + result);
-        return result;
+        return messageRepository.existsByReceiverAndIsReadFalse(receiver);
     }
 
 

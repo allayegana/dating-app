@@ -13,6 +13,59 @@
             background-color: #f4f4f4;
         }
 
+        .profile-header {
+            display: flex;
+            justify-content: space-between; /* Ensures the return icon is on the right */
+            align-items: center;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .profile-header div {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-header img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .profile-name {
+            font-weight: bold;
+        }
+
+        /* Status placed under the name */
+        .status-indicator {
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .status-indicator.online {
+            color: green;
+        }
+
+        .status-indicator.offline {
+            color: gray;
+        }
+
+        .return-icon {
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #000;
+            margin-right: 10px;
+        }
+
         .sidebar {
             width: 80px;
             border-right: 1px solid #ccc;
@@ -50,35 +103,20 @@
             margin-top: 5px;
         }
 
-        .sidebar:hover .contact-info {
+        .contact:hover .contact-info {
             display: block;
-        }
-
-        .contact:hover {
-            background-color: #e0e0e0;
         }
 
         .unread-conversation {
             background-color: #f0f8ff;
-        }
-
-        .badge {
-            background-color: red;
-            color: white;
-            padding: 3px 6px;
-            border-radius: 50%;
-            font-size: 0.8em;
-            position: absolute;
-            top: 5px;
-            right: 5px;
+            color: red;
         }
 
         .chat-area {
-            flex-grow: 1;
+            width: calc(100% - 80px);
             display: flex;
             flex-direction: column;
             background-color: white;
-            padding: 10px;
         }
 
         .messages {
@@ -93,36 +131,50 @@
         .message {
             margin-bottom: 20px;
             display: flex;
+            align-items: flex-start;
         }
 
         .message.you {
             justify-content: flex-end;
         }
 
+        .message.them {
+            justify-content: flex-start;
+        }
+
         .message.you .content {
             background-color: #d1e7dd;
-            align-self: flex-end;
-            text-align: right;
-            border-radius: 10px 0 10px 10px;
-            padding: 10px;
-            max-width: 60%;
-            word-wrap: break-word;
+            color: #000000;
         }
 
         .message.them .content {
             background-color: #e2e3e5;
-            align-self: flex-start;
-            text-align: left;
-            border-radius: 0 10px 10px 10px;
+            color: #4a4a4a;
+        }
+
+        .content {
             padding: 10px;
+            border-radius: 10px;
             max-width: 60%;
             word-wrap: break-word;
+            display: inline-block;
+            text-align: left;
+        }
+
+        .message img {
+            max-width: 150px;
+            max-height: 150px;
+            height: auto;
+            border-radius: 8px;
+            margin: 10px auto;
+            display: block;
         }
 
         .timestamp {
             font-size: 0.8em;
             color: #888;
             margin-top: 5px;
+            text-align: right;
         }
 
         .form-container {
@@ -133,20 +185,6 @@
             align-items: center;
         }
 
-        .profile-header {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            padding: 10px;
-        }
-
-        .profile-header img {
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            margin-right: 10px;
-        }
-
         textarea {
             flex-grow: 1;
             resize: none;
@@ -155,6 +193,7 @@
             border: 1px solid #ccc;
             margin-right: 10px;
             height: 45px;
+            font-size: 16px;
         }
 
         .file-input {
@@ -174,36 +213,38 @@
             background-color: #4CAF50;
             color: white;
             cursor: pointer;
-            font-size: 1.2em;
+            font-size: 1.5em;
         }
 
         button:hover {
             background-color: #45a049;
         }
 
-        .message img {
-            max-width: 150px;
-            height: auto;
+        .image-preview-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        #image-preview {
+            max-width: 50px;
+            max-height: 50px;
             border-radius: 8px;
-            margin-top: 10px;
-        }
-
-        /* Online/Offline status indicators */
-        .online-indicator {
-            color: green;
-            font-weight: bold;
             margin-left: 10px;
             display: block;
-            font-size: 0.9em;
         }
 
-        .offline-indicator {
-            color: gray;
-            font-weight: bold;
-            margin-left: 10px;
-            display: block;
-            font-size: 0.9em;
+        .remove-image-btn {
+            position: absolute;
+            top: -5px;
+            right: -10px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            padding: 5px;
         }
+
     </style>
 </head>
 <body>
@@ -214,7 +255,6 @@
         <li th:each="contact : ${contacts}" class="contact" th:classappend="${contactUnreadStatus[contact]} ? 'unread-conversation' : ''">
             <a th:href="@{'/messages/' + ${contact.id}}" style="text-decoration: none; position: relative;">
                 <img th:src="@{'/profile-picture/' + ${contact.id}}" alt="Contact Image"/>
-                <!-- Show online/offline indicator next to the contact image -->
                 <span th:if="${contact.isOnline}" class="online-indicator">Online</span>
                 <span th:if="${!contact.isOnline}" class="offline-indicator">Offline</span>
                 <div class="contact-info">
@@ -229,23 +269,28 @@
 
 <div class="chat-area">
     <div class="profile-header">
-        <img th:src="@{'/profile-picture/' + ${receiver.id}}" alt="Profile Picture">
         <div>
-            <span th:text="${receiver.name}" style="font-weight: bold;"></span>
-            <!-- Show online/offline status under the name -->
-            <span th:if="${receiver.isOnline}" class="online-indicator">Online</span>
-            <span th:if="${!receiver.isOnline}" class="offline-indicator">Offline</span>
+            <img th:src="@{'/profile-picture/' + ${receiver.id}}" alt="Profile Picture">
+            <div class="profile-info">
+                <span th:text="${receiver.name}" class="profile-name"></span>
+                <span th:if="${receiver.isOnline}" class="status-indicator online">Online</span>
+                <span th:if="${!receiver.isOnline}" class="status-indicator offline">Offline</span>
+            </div>
         </div>
+        <a th:href="@{'/profile'}" class="return-icon">
+            <i class="fas fa-user"></i>
+        </a>
     </div>
+
     <div class="messages">
         <div th:each="message : ${messages}" th:class="'message ' + (${message.sender.id == currentUser.id} ? 'you' : 'them')">
             <div class="content">
                 <span th:text="${message.sender.id == currentUser.id ? 'Vous' : message.sender.name}"></span>:
                 <span th:text="${message.content}"></span>
-                <br>
                 <span th:if="${message.imageUrl}">
                     <img th:src="@{'/uploads/' + ${message.imageUrl}}" alt="Image Attachée">
                 </span>
+                <br>
                 <span class="timestamp" th:text="${#temporals.format(message.timestamp, 'yyyy-MM-dd HH:mm')}"></span>
             </div>
         </div>
@@ -259,7 +304,13 @@
                 <label class="file-label" for="file-input" style="margin-left: 10px;">
                     <i class="fas fa-paperclip" style="font-size: 1.5em; cursor: pointer;"></i>
                 </label>
-                <input type="file" id="file-input" name="image" accept="image/*" class="file-input">
+                <input type="file" id="file-input" name="image" accept="image/*" class="file-input" onchange="previewImage(event)">
+
+                <!-- Preview the image inside the input area -->
+                <div class="image-preview-container">
+                    <img id="image-preview" src="" alt="Image Preview" style="display: none;">
+                    <button type="button" class="remove-image-btn" onclick="removeImage()" style="display: none;">&times;</button>
+                </div>
 
                 <button type="submit" style="background-color: #4CAF50; border: none; border-radius: 50%; padding: 10px; margin-left: 10px; color: white; font-size: 1.5em; cursor: pointer;">
                     <i class="fas fa-paper-plane"></i>
@@ -268,6 +319,36 @@
         </form>
     </div>
 </div>
+
+<script>
+    function previewImage(event) {
+        const imagePreview = document.getElementById('image-preview');
+        const removeButton = document.querySelector('.remove-image-btn');
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function() {
+            imagePreview.src = reader.result;
+            imagePreview.style.display = 'block';
+            removeButton.style.display = 'block';
+        };
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function removeImage() {
+        const imagePreview = document.getElementById('image-preview');
+        const removeButton = document.querySelector('.remove-image-btn');
+        const fileInput = document.getElementById('file-input');
+
+        imagePreview.src = '';
+        imagePreview.style.display = 'none';
+        removeButton.style.display = 'none';
+        fileInput.value = ''; // Clear the input field
+    }
+</script>
 
 </body>
 </html>
