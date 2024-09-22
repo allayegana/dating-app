@@ -1,33 +1,40 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+
 <head>
-    <title>Register</title>
+    <title th:text="#{register.title}">Register</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: url('https://example.com/your-image.jpg') no-repeat center center fixed;
-            background-size: cover;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             height: 100vh;
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
+            animation: fadeIn 1.5s ease-in;
         }
 
         .register-container {
-            background-color: rgba(255, 255, 255, 0.9);
+            background-color: rgba(255, 255, 255, 0.95);
             padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.4s ease-in-out;
         }
 
-        .register-container h1 {
+        .register-container:hover {
+            transform: scale(1.03);
+        }
+
+        h1 {
             text-align: center;
             margin-bottom: 20px;
-            font-size: 24px;
+            font-size: 26px;
             color: #e91e63;
         }
 
@@ -42,8 +49,8 @@
 
         button {
             width: 100%;
-            padding: 10px;
-            background-color: #e91e63;
+            padding: 12px;
+            background-color: #4A90E2;
             color: white;
             border: none;
             border-radius: 5px;
@@ -53,27 +60,94 @@
         }
 
         button:hover {
-            background-color: #d81b60;
+            background-color: #3b7dd8;
+        }
+
+        .language-selection {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .language-selection button {
+            margin-left: 10px;
+            background-color: #007bff;
+            border: none;
+            padding: 5px 10px;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .language-selection button:hover {
+            background-color: #0056b3;
+        }
+
+        .checkbox-row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .terms-link {
+            display: inline-block;
+            margin-right: 15px;
+            color: #e91e63;
+            text-decoration: none;
+        }
+
+        .terms-link:hover {
+            text-decoration: underline;
+        }
+
+        .login-link {
+            display: inline-block;
+            color: #e91e63;
+            text-decoration: none;
+        }
+
+        .login-link:hover {
+            text-decoration: underline;
+        }
+
+        .link-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
     </style>
 </head>
+
 <body>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="register-container">
-                <h1>Register</h1>
+                <div class="language-selection">
+                    <button id="btnEnglish" th:text="#{language.english}">English</button>
+                    <button id="btnFrench" th:text="#{language.french}">Français</button>
+                </div>
+
+                <h1 th:text="#{register.title}">Inscription</h1>
                 <form th:action="@{/register}" th:object="${userDTO}" method="post" enctype="multipart/form-data">
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="username">Username:</label>
+                            <label for="username" th:text="#{username}">Nom d'utilisateur:</label>
                             <div class="input-group">
                                 <i class="fas fa-user"></i>
                                 <input type="text" class="form-control" id="username" th:field="*{username}" required>
                             </div>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="password">Password:</label>
+                            <label for="password" th:text="#{password}">Mot de passe:</label>
                             <div class="input-group">
                                 <i class="fas fa-lock"></i>
                                 <input type="password" class="form-control" id="password" th:field="*{password}" required>
@@ -83,14 +157,14 @@
 
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="name">Name:</label>
+                            <label for="name" th:text="#{name}">Nom:</label>
                             <div class="input-group">
                                 <i class="fas fa-id-card"></i>
                                 <input type="text" class="form-control" id="name" th:field="*{name}" required>
                             </div>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="age">Age:</label>
+                            <label for="age" th:text="#{age}">Âge:</label>
                             <div class="input-group">
                                 <i class="fas fa-birthday-cake"></i>
                                 <input type="number" class="form-control" id="age" th:field="*{age}" required>
@@ -100,14 +174,14 @@
 
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="location">Location:</label>
+                            <label for="location" th:text="#{location}">Lieu:</label>
                             <div class="input-group">
                                 <i class="fas fa-map-marker-alt"></i>
                                 <input type="text" class="form-control" id="location" th:field="*{location}" required>
                             </div>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="profilePicture">Profile Picture:</label>
+                            <label for="profilePicture" th:text="#{profile.picture}">Photo de profil:</label>
                             <div class="input-group">
                                 <i class="fas fa-camera"></i>
                                 <input type="file" class="form-control" id="profilePicture" name="profilePicture">
@@ -116,41 +190,46 @@
                     </div>
 
                     <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="maritalStatus">Marital Status:</label>
+                        <div class="form-group col-md-4">
+                            <label for="maritalStatus" th:text="#{marital.status}">Statut matrimonial:</label>
                             <select id="maritalStatus" class="form-control" th:field="*{maritalStatus}">
-                                <option value="Single">Single</option>
-                                <option value="Married">Married</option>
-                                <option value="Divorced">Divorced</option>
+                                <option value="Single" th:text="#{single}">Célibataire</option>
+                                <option value="Married" th:text="#{married}">Marié</option>
+                                <option value="Divorced" th:text="#{divorced}">Divorcé</option>
                             </select>
                         </div>
-                        <div class="form-group col-md-6">
-                            <label for="hasChildren">Has Children:</label>
-                            <input type="checkbox" id="hasChildren" th:field="*{hasChildren}">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="gender">Gender:</label>
-                            <select id="gender" class="form-control" th:field="*{gender}">
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="skinTone">Skin Tone:</label>
+                        <div class="form-group col-md-4">
+                            <label for="skinTone" th:text="#{skin.tone}">Couleur de teint:</label>
                             <input type="text" class="form-control" id="skinTone" th:field="*{skinTone}">
                         </div>
+                        <div class="form-group col-md-4">
+                            <label for="gender" th:text="#{gender}">Sexe:</label>
+                            <select id="gender" class="form-control" th:field="*{gender}">
+                                <option value="Male" th:text="#{male}">Homme</option>
+                                <option value="Female" th:text="#{female}">Femme</option>
+                                <option value="Other" th:text="#{other}">Autre</option>
+                            </select>
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="termsAccepted">Accept Terms:</label>
-                        <input type="checkbox" id="termsAccepted" th:field="*{termsAccepted}" required>
+
+                    <div class="checkbox-row">
+                        <div class="form-group">
+                            <label for="hasChildren" th:text="#{has.children}">A des enfants:</label>
+                            <input type="checkbox" id="hasChildren" th:field="*{hasChildren}">
+                        </div>
+                        <div class="form-group">
+                            <label for="termsAccepted" th:text="#{terms.accepted}">Accepter les conditions:</label>
+                            <input type="checkbox" id="termsAccepted" th:field="*{termsAccepted}" required>
+                        </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Register</button>
+                    <div class="link-row">
+                        <a href="/terms" class="terms-link" th:text="#{term.lin}" >Voir les conditions d'utilisation</a>
+                        <a href="/login" class="login-link" th:text="#{termf.linf}">Vous avez déjà un compte ? Connexion</a>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" th:text="#{register}">Inscrire</button>
                 </form>
             </div>
         </div>
@@ -161,5 +240,23 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<script>
+    // Handle language change
+    document.getElementById('btnEnglish').addEventListener('click', function() {
+        setLanguage('en');
+    });
+    document.getElementById('btnFrench').addEventListener('click', function() {
+        setLanguage('fr');
+    });
+
+    function setLanguage(lang) {
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('lang', lang);
+        const newUrl = window.location.pathname + '?' + urlParams.toString();
+        window.location.href = newUrl;
+    }
+</script>
 </body>
+
 </html>

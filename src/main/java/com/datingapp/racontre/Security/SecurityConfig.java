@@ -19,23 +19,28 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/register", "/login", "/css/**", "/uploads/**").permitAll()
+                                .requestMatchers("/register", "/login","/terms","privacy", "/css/**", "/uploads/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .formLogin(formLogin ->
                         formLogin
                                 .loginPage("/login")
                                 .defaultSuccessUrl("/profile", true)
-                                .failureUrl("/login?error=true") // Redirige ici en cas d'erreur
+                                .failureUrl("/login?error=true") // Redirect on error
                                 .permitAll()
                 )
-                .logout(LogoutConfigurer::permitAll
+                .logout(logout ->
+                        logout
+                                .logoutUrl("/logout") // The URL to trigger logout
+                                .logoutSuccessUrl("/login?logout=true") // Redirect to login after logout
+                                .invalidateHttpSession(true) // Invalidate session
+                                .deleteCookies("JSESSIONID") // Delete cookies
+                                .permitAll()
                 );
 
         return http.build();

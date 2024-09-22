@@ -45,6 +45,16 @@ public class UserController {
         return "login";
     }
 
+    @GetMapping("/terms")
+    public String showTerms() {
+        return "terms";
+    }
+
+    @GetMapping("/privacy")
+    public String showprivacy() {
+        return "privacy";
+    }
+
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         model.addAttribute("userDTO", new UserDto());

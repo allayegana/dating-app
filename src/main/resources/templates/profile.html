@@ -36,54 +36,71 @@
             margin-bottom: 10px;
         }
 
-        .sidebar a {
+        .sidebar a, .sidebar form {
             margin: 15px 0;
             font-size: 1.5em;
             color: white;
             text-decoration: none;
+            position: relative;
         }
 
-        .sidebar a:hover {
+        .sidebar a:hover, .sidebar button:hover {
             color: #FFD700;
         }
 
-        /* Container adjustment to accommodate the sidebar */
-        .container {
-            max-width: 95%;
-            margin: 120px auto 0;
-            padding: 20px;
-            margin-left: 100px;
+        .sidebar .badge {
+            background-color: red;
+            color: white;
+            font-size: 0.8em;
+            padding: 2px 5px;
+            border-radius: 50%;
+            position: absolute;
+            top: -5px;
+            right: -10px;
         }
 
+        /* Adjust container to fit more cards */
+        .container {
+            width: 100%;
+            padding: 20px;
+            margin-left: 100px; /* Leave space for the sidebar */
+            margin-top: 20px; /* Reduced space above the cards */
+        }
+
+        /* Display 5 cards per row and reduce space between cards */
         .user-cards {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
+            grid-gap: 20px;
+            justify-items: center;
+            align-items: stretch;
         }
 
         .user-card {
             background-color: white;
             border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             padding-bottom: 20px;
+            max-width: 250px; /* Adjust card width for smaller size */
+            width: 100%;
         }
 
         .user-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         .user-card img {
             width: 100%;
-            height: 150px;
+            height: 120px; /* Adjust image height for smaller card */
             object-fit: cover;
             cursor: pointer;
         }
 
         .user-info {
-            padding: 15px;
+            padding: 10px; /* Reduce padding for a more compact look */
             text-align: left;
             position: relative;
         }
@@ -95,8 +112,8 @@
         }
 
         .user-info p {
-            margin: 10px 0;
-            font-size: 1em;
+            margin: 5px 0; /* Reduce margin between info */
+            font-size: 0.9em; /* Reduce font size for a better fit */
         }
 
         .user-info p i {
@@ -159,52 +176,25 @@
             text-align: center;
         }
 
-        @media (max-width: 600px) {
-            .user-card img {
-                height: 100px;
+        /* Responsive adjustments for mobile */
+        @media (max-width: 1200px) {
+            .user-cards {
+                grid-template-columns: repeat(4, 1fr); /* Adjust to 4 cards per row for smaller screens */
             }
         }
 
-        /* Modal styles for image zoom */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1001;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
-            overflow: hidden;
+        @media (max-width: 768px) {
+            .user-cards {
+                grid-template-columns: repeat(2, 1fr); /* Adjust to 2 cards per row on tablets */
+            }
         }
 
-        .modal-content {
-            margin: auto;
-            display: block;
-            width: 80%;
-            max-width: 700px;
+        @media (max-width: 480px) {
+            .user-cards {
+                grid-template-columns: 1fr; /* Single card per row on very small screens */
+            }
         }
 
-        .modal-content img {
-            width: 100%;
-            height: auto;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 10px;
-            right: 25px;
-            color: white;
-            font-size: 35px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .close-modal:hover, .close-modal:focus {
-            color: #bbb;
-            text-decoration: none;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
@@ -212,8 +202,26 @@
 <!-- Sidebar for vertical navigation -->
 <div class="sidebar">
     <img th:src="@{'/profile-picture/' + ${user.id}}" alt="Profile Picture">
-    <a th:href="@{'/messages/conversations'}" title="Messages"><i class="fas fa-envelope"></i></a>
-    <a th:href="@{'/logout'}" title="Logout"><i class="fas fa-sign-out-alt"></i></a>
+    <a th:href="@{'/messages/conversations'}" title="Messages">
+        <i class="fas fa-envelope"></i>
+        <!-- Afficher un badge si il y a de nouveaux messages -->
+        <span th:if="${hasUnreadMessages}" class="badge">1</span> <!-- Badge de notification -->
+    </a>
+    <a th:href="@{'/subscriptions'}" title="Abonnements">
+        <i class="fas fa-bell"></i> <!-- Icône d'abonnement -->
+    </a>
+    <a th:href="@{'/payment'}" title="Paiement">
+        <i class="fas fa-credit-card"></i> <!-- Icône de paiement -->
+    </a>
+    <a th:href="@{'/settings'}" title="Paramètres">
+        <i class="fas fa-cog"></i> <!-- Icône des paramètres -->
+    </a>
+    <!-- Logout form for POST method -->
+    <form th:action="@{/logout}" method="post">
+        <button type="submit" title="Logout" style="border:none;background:none;color:white;cursor:pointer;">
+            <i class="fas fa-sign-out-alt"></i>
+        </button>
+    </form>
 </div>
 
 <div class="container">

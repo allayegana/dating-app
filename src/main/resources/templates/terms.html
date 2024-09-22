@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms and Conditions</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .terms-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 32px;
+            text-align: center;
+            color: #4A90E2;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #e91e63;
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        ul li {
+            padding-left: 20px;
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        ul li:before {
+            content: "\f00c";
+            font-family: "FontAwesome";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: #4A90E2;
+        }
+
+        .terms-footer {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .terms-footer a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+
+
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4A90E2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #3b7dd8;
+        }
+
+        @media (max-width: 768px) {
+            .terms-container {
+                padding: 20px;
+                margin: 20px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            h2 {
+                font-size: 22px;
+            }
+
+            p {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="terms-container">
+  <h1>Terms and Conditions</h1>
+
+  <h2>1. General Conditions</h2>
+  <p>
+    By using our platform, you agree to the following terms. Please read them carefully before continuing.
+  </p>
+
+  <h2>2. Eligibility</h2>
+  <p>
+    You must be at least 18 years old to register and use our services. Users under the age of 18 are prohibited.
+  </p>
+
+  <h2>3. User Conduct</h2>
+  <ul>
+    <li>You agree to provide truthful and accurate information on your profile.</li>
+    <li>You must respect other users and maintain a positive and respectful environment.</li>
+    <li>Harassment, abuse, or inappropriate behavior will not be tolerated.</li>
+  </ul>
+
+  <h2>4. Privacy</h2>
+  <p>
+    We take your privacy seriously. Please review our <a href="/privacy">Privacy Policy</a> for details on how we handle your data.
+  </p>
+
+  <h2>5. Limitation of Liability</h2>
+  <p>
+    We are not responsible for any damages or losses resulting from interactions with other users on the platform.
+  </p>
+
+  <h2>6. Changes to the Terms</h2>
+  <p>
+    We may update these terms from time to time. Please check this page periodically for updates.
+  </p>
+
+  <div class="terms-footer">
+    <a href="/register">Return to Registration</a>
+    <br>
+    <a href="/" class="back-button">Back to Home</a>
+  </div>
+</div>
+
+<!-- Bootstrap JS, Popper.js, and jQuery -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</body>
+</html>
